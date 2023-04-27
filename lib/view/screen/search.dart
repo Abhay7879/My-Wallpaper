@@ -1,34 +1,10 @@
-import 'package:diplomatic_wallpaper/controller/apiOper.dart';
-import 'package:diplomatic_wallpaper/model/photosModel.dart';
 import 'package:diplomatic_wallpaper/view/widgets/CustomAppBar.dart';
 import 'package:diplomatic_wallpaper/view/widgets/SearchBar.dart';
 import 'package:diplomatic_wallpaper/view/widgets/catBlock.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  List<PhotosModel> trendingWallList = [];
-  //bool isLoading = true;
-
-  GetTrendingWallpapers() async {
-    setState(() {
-      //isLoading = false;
-    });
-    trendingWallList = await ApiOperations.getTrendingWallpapers();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    ApiOperations.getTrendingWallpapers();
-    GetTrendingWallpapers();
-  }
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,20 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SearchBar(),
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: SizedBox(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 30,
-                  itemBuilder: (context, index) => CatBlock(),
-                ),
-              ),
-            ),
-            Container(
               padding: EdgeInsets.symmetric(horizontal: 8),
-              height: 647,
+              height: MediaQuery.of(context).size.height,
               child: GridView.builder(
                 physics: BouncingScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -70,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisSpacing: 13,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: trendingWallList.length,
+                itemCount: 16,
                 itemBuilder: (context, index) => Container(
                   height: 500,
                   width: 50,
@@ -80,11 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      trendingWallList[index].imgSrc,
-                      height: 500,
-                      width: 50,
-                      fit: BoxFit.cover,
-                    ),
+                        height: 500,
+                        width: 50,
+                        fit: BoxFit.cover,
+                        "https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=600"),
                   ),
                 ),
               ),

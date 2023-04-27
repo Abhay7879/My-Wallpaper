@@ -1,3 +1,4 @@
+import 'package:diplomatic_wallpaper/view/screen/category.dart';
 import 'package:diplomatic_wallpaper/view/screen/home.dart';
 import 'package:flutter/material.dart';
 
