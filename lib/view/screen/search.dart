@@ -1,12 +1,33 @@
+import 'package:diplomatic_wallpaper/controller/apiOper.dart';
+import 'package:diplomatic_wallpaper/model/photosModel.dart';
+import 'package:diplomatic_wallpaper/view/screen/fullScreen.dart';
 import 'package:diplomatic_wallpaper/view/widgets/CustomAppBar.dart';
 import 'package:diplomatic_wallpaper/view/widgets/SearchBar.dart';
 import 'package:diplomatic_wallpaper/view/widgets/catBlock.dart';
 import 'package:flutter/material.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  String query;
+  SearchScreen({super.key, required this.query});
 
   @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  late List<PhotosModel> searchResults = [];
+  GetSearchResults() async {
+    searchResults = await ApiOperations.searchWallpapers(widget.query);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    GetSearchResults();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -23,6 +44,9 @@ class SearchScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: SearchBar(),
             ),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8),
               height: MediaQuery.of(context).size.height,
@@ -34,20 +58,34 @@ class SearchScreen extends StatelessWidget {
                   crossAxisSpacing: 13,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: 16,
-                itemBuilder: (context, index) => Container(
-                  height: 500,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
+                itemCount: searchResults.length,
+                itemBuilder: (context, index) => GridTile(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  imgUrl: searchResults[index].imgSrc)));
+                    },
+                    child: Hero(
+                      tag: searchResults[index].imgSrc,
+                      child: Container(
                         height: 500,
                         width: 50,
-                        fit: BoxFit.cover,
-                        "https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=600"),
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                              height: 500,
+                              width: 50,
+                              fit: BoxFit.cover,
+                              searchResults[index].imgSrc),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

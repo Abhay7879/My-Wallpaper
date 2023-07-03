@@ -1,7 +1,10 @@
+import 'package:diplomatic_wallpaper/view/screen/search.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({super.key});
+  SearchBar({super.key});
+
+  TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +18,16 @@ class SearchBar extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              controller: _searchController,
+              onSubmitted: (value) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SearchScreen(query: _searchController.text),
+                  ),
+                );
+              },
               decoration: InputDecoration(
                 hintText: "Search Wallpaper",
                 errorBorder: InputBorder.none,
@@ -28,7 +41,11 @@ class SearchBar extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              print("Searching....");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SearchScreen(query: _searchController.text)));
             },
             child: Icon(Icons.search),
           )
